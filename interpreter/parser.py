@@ -1,23 +1,6 @@
-from myinterpreter.token_types import Token, TokenType
-from myinterpreter.tokenizer import Tokenizer
 from dataclasses import dataclass
 
-@dataclass
-class TreeNode:
-    pass
-
-
-@dataclass
-class BinOp(TreeNode):
-    op: str
-    left: int
-    right: int
-
-
-@dataclass
-class Int(TreeNode):
-    value: int
-
+from interpreter_types import Token, TokenType, BinOp, Int
 
 class Parser:
 
@@ -63,8 +46,3 @@ class Parser:
 
         return BinOp(op, int(left_op.value), int(right_op.value))
     
-#if __name__ ==  "__main__":
-#    code = "3 + 5"
-#    parser = Parser(list(Tokenizer(code)))
-#    print(parser.parse())
-#

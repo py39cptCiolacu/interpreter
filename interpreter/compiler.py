@@ -1,17 +1,6 @@
-from dataclasses import dataclass
-from enum import StrEnum, auto
-from typing import Any, Generator
+from typing import Generator
 
-from parser import BinOp
-
-class BytecodeType(StrEnum):
-    BINOP = auto()
-    PUSH = auto()
-
-@dataclass
-class Bytecode:
-    type: BytecodeType
-    value: Any = None
+from interpreter_types import BinOp, Bytecode, BytecodeType
 
 class Compiler:
 
@@ -28,11 +17,3 @@ class Compiler:
         yield Bytecode(BytecodeType.PUSH, right)
 
         yield Bytecode(BytecodeType.BINOP, self.tree.op)
-
-#if __name__ == "__main__":
-#    from tokenizer import Tokenizer
-#    from parser import Parser
-#
-#    compiler = Compiler(Parser(list(Tokenizer("3 + 5"))).parse())
-#    for bc in compiler.compile():
-#        print(bc)

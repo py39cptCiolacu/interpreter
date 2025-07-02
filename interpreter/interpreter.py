@@ -1,5 +1,5 @@
-from compiler import Bytecode, BytecodeType
 from stack import Stack
+from interpreter_types import Bytecode, BytecodeType
 
 class Interpreter:
 
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     # code = sys.argv[1]
 
-    code = "3 + 7 + 1"
+    code = "3 + 7"
     tokens = list(Tokenizer(code))
     tree = Parser(tokens).parse()
     bytecode = list(Compiler(tree).compile())

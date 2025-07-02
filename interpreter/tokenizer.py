@@ -1,8 +1,7 @@
 from string import digits
 from typing import Generator
 
-from myinterpreter.token_types import Token, TokenType
-
+from interpreter_types import Token, TokenType
 
 class Tokenizer:
 
