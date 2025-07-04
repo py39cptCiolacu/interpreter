@@ -7,6 +7,8 @@ class TokenType(StrEnum):
     INT = auto()
     PLUS = auto()
     MINUS = auto()
+    MULTIPLY = auto()
+    DIVIDE = auto()
     EOF = auto()
 
 @dataclass

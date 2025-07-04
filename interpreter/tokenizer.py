@@ -23,15 +23,39 @@ class Tokenizer:
         
         char = self.code[self.ptr]
         self.ptr += 1
-        if char == "+":
-            return Token(TokenType.PLUS)
+
+        match char:
+            case "+":
+                return Token(TokenType.PLUS)
         
-        if char == "-":
-            return Token(TokenType.MINUS)
+            case "-":
+                return Token(TokenType.MINUS)
         
-        if char in digits:
-            return Token(TokenType.INT, int(char))
+            case "*":
+                return Token(TokenType.MULTIPLY)
         
+            case "/":
+                return Token(TokenType.DIVIDE)
+            
+
+            # 123 + 587
+
+            case c if c in digits:
+                #OPTIMIZE THIS
+
+                value = c
+                for i in range(self.ptr, len(self.code)):
+                    if self.code[i] not in digits:
+                        self.ptr = i
+                        return Token(TokenType.INT, value=int(value))
+                    
+                    value += self.code[i]
+
+                self.ptr = len(self.code)
+                return Token(TokenType.INT, value=int(value))
+
+            
         raise RuntimeError(f"Can't tokenize {char!r}")
+        
     
 

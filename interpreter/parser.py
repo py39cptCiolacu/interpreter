@@ -35,13 +35,23 @@ class Parser:
     def parse(self) -> BinOp:
         left_op = self.eat(TokenType.INT)
 
-        if self.peek() == TokenType.PLUS:
-            op = "+"
-            self.eat(TokenType.PLUS)
-        else:
-            op = "-"
-            self.eat(TokenType.MINUS)
-        
+        match self.peek():
+            case TokenType.PLUS:
+                op = "+"
+                self.eat(TokenType.PLUS)
+
+            case TokenType.MINUS:
+                op = "-"
+                self.eat(TokenType.MINUS)
+
+            case TokenType.MULTIPLY:
+                op = "*"
+                self.eat(TokenType.MULTIPLY)
+
+            case TokenType.DIVIDE:
+                op = "/"
+                self.eat(TokenType.DIVIDE)
+
         right_op = self.eat(TokenType.INT)
 
         return BinOp(op, int(left_op.value), int(right_op.value))

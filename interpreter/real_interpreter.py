@@ -14,30 +14,24 @@ class Interpreter:
                 self.stack.push(bc.value)
             elif bc.type == BytecodeType.BINOP:
                 right = self.stack.pop()
-                left = self.stack.pop()
-                if bc.value == "+":
-                    result = left + right
-                elif bc.value == "-":
-                    result = left - right
-                else:
+
+                if bc.value not in ["+", "-", "*", "/"]:
                     raise RuntimeError(f"Unkown operator {bc.value}")
-                
+        
+                left = self.stack.pop()
+
+                match bc.value:
+                    case "+":
+                        result = left + right
+                    case "-":
+                        result = left - right
+                    case "*":
+                        result = left * right
+                    case "/":
+                        result = left / right
+                        
                 self.stack.push(result)
 
         print("Done!")
         print(self.stack)
 
-if __name__ == "__main__":
-    import sys
-
-    from tokenizer import Tokenizer
-    from parser import Parser
-    from compiler import Compiler
-
-    # code = sys.argv[1]
-
-    code = "3 + 7"
-    tokens = list(Tokenizer(code))
-    tree = Parser(tokens).parse()
-    bytecode = list(Compiler(tree).compile())
-    Interpreter(bytecode).interpret()
