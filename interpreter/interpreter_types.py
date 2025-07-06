@@ -1,6 +1,7 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum, auto
-from typing import Any
+from typing import Any, Union
 
 # --- Token-related ---
 class TokenType(StrEnum):
@@ -29,9 +30,14 @@ class BinOp(TreeNode):
     right: int
 
 @dataclass
+class AST:
+    op: str
+    left: Union[int, BinOp, AST]
+    right: Union[int, BinOp, AST]
+
+@dataclass
 class Int(TreeNode):
     value: int
-
 
 # --- Bytecode ---
 class BytecodeType(StrEnum):
