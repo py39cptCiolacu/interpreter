@@ -1,19 +1,29 @@
-from typing import Generator
+from interpreter_types import Bytecode, BytecodeType, AST, Token, Int, UnaryOP, BinaryOp
 
-from interpreter_types import BinOp, Bytecode, BytecodeType
 
 class Compiler:
-
-    def __init__(self, tree: BinOp) -> None:
+    def __init__(self, tree: AST) -> None:
         self.tree = tree
 
-    def compile(self) -> Generator[Bytecode, None, None]:
-        left = self.tree.left
+    def compile(self) -> list[Bytecode]:
+        return self._compile_node(self.tree)
 
-        yield Bytecode(BytecodeType.PUSH, left)
+    def _compile_node(self, node: AST) -> list[Bytecode]:
+        match node:
 
-        right = self.tree.right
+            case Int(value=value):
+                return [Bytecode(BytecodeType.PUSH, value)]
 
-        yield Bytecode(BytecodeType.PUSH, right)
+            case UnaryOP(op=op, operand=operand):
+                return self._compile_node(operand) + [
+                    Bytecode(BytecodeType.UNARYOP, op)
+                ]
 
-        yield Bytecode(BytecodeType.BINOP, self.tree.op)
+            case BinaryOp(left=left, op=op, right=right):
+                return (
+                    self._compile_node(left)
+                    + self._compile_node(right)
+                    + [Bytecode(BytecodeType.BINOP, op)]
+                )
+
+        raise TypeError(f"Unkown AST node: {node}")

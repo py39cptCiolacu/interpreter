@@ -8,7 +8,7 @@ class Stack:
 
     def pop(self) -> int:
         return self.stack.pop()
-    
+
     def peek(self) -> int:
         return self.stack[-1]
 

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from enum import StrEnum, auto
 from typing import Any, Union
 
+
 # --- Token-related ---
 class TokenType(StrEnum):
     INT = auto()
@@ -12,39 +13,44 @@ class TokenType(StrEnum):
     DIVIDE = auto()
     EOF = auto()
 
+
 @dataclass
 class Token:
     type: TokenType
     value: Any = None
 
 
-# --- AST Tree ---
-@dataclass
-class TreeNode:
-    pass
-
-@dataclass
-class BinOp(TreeNode):
-    op: str
-    left: int
-    right: int
-
-@dataclass
-class AST:
-    op: str
-    left: Union[int, BinOp, AST]
-    right: Union[int, BinOp, AST]
-
-@dataclass
-class Int(TreeNode):
-    value: int
-
 # --- Bytecode ---
 class BytecodeType(StrEnum):
     PUSH = auto()
     BINOP = auto()
+    UNARYOP = auto()
+
 
 @dataclass
 class Bytecode:
     type: BytecodeType
     value: Any
+
+
+# -----Pratt Parsing-----
+class AST:
+    pass
+
+
+@dataclass
+class Int(AST):
+    value: int
+
+
+@dataclass
+class UnaryOP(AST):
+    op: TokenType
+    operand: AST
+
+
+@dataclass
+class BinaryOp(AST):
+    left: AST
+    op: TokenType
+    right: AST
