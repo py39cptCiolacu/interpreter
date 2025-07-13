@@ -8,8 +8,7 @@ from real_interpreter import Interpreter
 
 
 def main():
-    code = sys.argv[1]
-
+    # code = sys.argv[1]
     # code = "3 + 5 * 5 + 2 + 9 - 1 * 12 + 2 - 1"
 
     # left = 3
@@ -27,23 +26,35 @@ def main():
     #         left = 1
     #         op = -
     #         right  2
+    interpreter = Interpreter([])
 
-    # 1. From STR to TOKENS-LIST
-    tokens = list(Tokenizer(code))
+    code = ""
+    while True:
+        code = input(">")
 
-    # 2. From TOKENS-LIST to AST
-    parser = PrattParser(tokens)
-    ast = parser.parse()
-    pprint(ast)
+        if code is None:
+            continue
 
-    # 3. From AST to BYTECODE-LIST
-    compiler = Compiler(ast)
-    bytecode = compiler.compile()
-    pprint(bytecode)
+        if code == "exit":
+            break
 
-    # 4. From BYTECODE-LIST to RESULT
-    Interpreter(bytecode).interpret()
+        # 1. From STR to TOKENS-LIST
+        tokens = list(Tokenizer(code))
+        # print(tokens)
+ 
+        # 2. From TOKENS-LIST to AST
+        parser = PrattParser(tokens)
+        ast = parser.parse()
+        # pprint(ast)
 
+        # 3. From AST to BYTECODE-LIST
+        compiler = Compiler(ast)
+        bytecode = compiler.compile()
+        # pprint(bytecode)
+
+        # 4. From BYTECODE-LIST to RESULT
+        interpreter.bytecode = bytecode
+        interpreter.interpret()
 
 if __name__ == "__main__":
     main()

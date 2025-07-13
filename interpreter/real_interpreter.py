@@ -9,23 +9,25 @@ class Interpreter:
         self.stack = Stack()
         self.bytecode = bytecode
         self.ptr: int = 0
+        self.env = {}
 
     def interpret(self) -> None:
-        pprint(self.bytecode)
+        # pprint(self.bytecode)
 
         for bc in self.bytecode:
+
             if bc.type == BytecodeType.PUSH:
                 self.stack.push(bc.value)
-                print(f"PUSH: {bc.value}")
+                # print(f"PUSH: {bc.value}")
             elif bc.type == BytecodeType.BINOP:
                 right = self.stack.pop()
-                print(f"POP: {right}")
+                # print(f"POP: {right}")
 
                 if bc.value not in ["plus", "minus", "multiply", "divide"]:
                     raise RuntimeError(f"Unkown operator {bc.value}")
 
                 left = self.stack.pop()
-                print(f"POP: {left}")
+                # print(f"POP: {left}")
 
                 match bc.value:
                     case "plus":
@@ -40,5 +42,12 @@ class Interpreter:
                 self.stack.push(result)
                 # print(f"PUSH: {result}")
 
-        print("Done!")
-        print(self.stack)
+            elif bc.type == BytecodeType.STORE:
+                self.env[bc.value] = self.stack.pop()
+
+            elif bc.type == BytecodeType.LOAD:
+                self.stack.push(self.env[bc.value])
+
+        # print("Done!")
+        if self.stack.stack:
+            print(self.stack.peek())

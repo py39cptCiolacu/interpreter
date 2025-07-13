@@ -1,4 +1,14 @@
-from interpreter_types import Bytecode, BytecodeType, AST, Token, Int, UnaryOP, BinaryOp
+from interpreter_types import (
+    Bytecode,
+    BytecodeType,
+    AST,
+    Token,
+    Int,
+    UnaryOP,
+    BinaryOp,
+    Variable,
+    Assignment,
+)
 
 
 class Compiler:
@@ -13,6 +23,12 @@ class Compiler:
 
             case Int(value=value):
                 return [Bytecode(BytecodeType.PUSH, value)]
+
+            case Variable(name=name):
+                return [Bytecode(BytecodeType.LOAD, name)]
+
+            case Assignment(name=name, value=value):
+                return self._compile_node(value) + [Bytecode(BytecodeType.STORE, name)]
 
             case UnaryOP(op=op, operand=operand):
                 return self._compile_node(operand) + [

@@ -11,6 +11,8 @@ class TokenType(StrEnum):
     MINUS = auto()
     MULTIPLY = auto()
     DIVIDE = auto()
+    EQUAL = auto()
+    IDENTIFIER = auto()
     EOF = auto()
 
 
@@ -25,6 +27,8 @@ class BytecodeType(StrEnum):
     PUSH = auto()
     BINOP = auto()
     UNARYOP = auto()
+    LOAD = auto()
+    STORE = auto()
 
 
 @dataclass
@@ -41,6 +45,17 @@ class AST:
 @dataclass
 class Int(AST):
     value: int
+
+
+@dataclass
+class Variable(AST):
+    name: str
+
+
+@dataclass
+class Assignment(AST):
+    name: str
+    value: AST
 
 
 @dataclass

@@ -1,4 +1,4 @@
-from string import digits
+from string import digits, ascii_letters
 from typing import Generator
 
 from interpreter_types import Token, TokenType
@@ -38,6 +38,9 @@ class Tokenizer:
             case "/":
                 return Token(TokenType.DIVIDE)
 
+            case "=":
+                return Token(TokenType.EQUAL)
+
             # 123 + 587
 
             case c if c in digits:
@@ -53,5 +56,16 @@ class Tokenizer:
 
                 self.ptr = len(self.code)
                 return Token(TokenType.INT, value=int(value))
+
+            case c if c in ascii_letters:
+                ident = c
+                for i in range(self.ptr, len(self.code)):
+                    if self.code[i] not in ascii_letters:
+                        self.ptr = i
+                        return Token(TokenType.IDENTIFIER, value=ident)
+
+                    ident += self.code[i]
+                self.ptr = len(self.code)
+                return Token(TokenType.IDENTIFIER, value=ident)
 
         raise RuntimeError(f"Can't tokenize {char!r}")

@@ -1,4 +1,13 @@
-from interpreter_types import Token, TokenType, AST, Int, UnaryOP, BinaryOp
+from interpreter_types import (
+    Token,
+    TokenType,
+    AST,
+    Int,
+    UnaryOP,
+    BinaryOp,
+    Assignment,
+    Variable,
+)
 
 PRECEDENCE = {
     TokenType.PLUS: 10,
@@ -43,6 +52,15 @@ class PrattParser:
     def nud(self, token: Token):
         if token.type == TokenType.INT:
             return Int(value=token.value)
+
+        elif token.type == TokenType.IDENTIFIER:
+            name = token.value
+            if self.current.type == TokenType.EQUAL:
+                self.advance()
+                expr = self.expression(0)
+                return Assignment(name, expr)
+            else:
+                return Variable(name)
 
         elif token.type == TokenType.MINUS:
             return UnaryOP(op=token.type, operand=self.expression(100))
